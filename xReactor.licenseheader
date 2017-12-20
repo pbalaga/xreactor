@@ -1,0 +1,22 @@
+extensions: designer.cs generated.cs
+extensions: .cs .cpp .h
+#region License
+
+// Copyright (c) Pawel Balaga https://xreactor.codeplex.com/
+// Licensed under MS-PL, See License file or http://opensource.org/licenses/MS-PL
+
+#endregion
+
+extensions: .aspx .ascx
+<%-- 
+Copyright (c) Pawel Balaga https://xreactor.codeplex.com/
+Licensed under MS-PL, See License file or http://opensource.org/licenses/MS-PL
+--%>
+extensions: .vb
+'Copyright (c) Pawel Balaga https://xreactor.codeplex.com/
+'Licensed under MS-PL, See License file or http://opensource.org/licenses/MS-PL
+extensions:  .xml .config .xsd
+<!--
+Copyright (c) Pawel Balaga https://xreactor.codeplex.com/
+Licensed under MS-PL, See License file or http://opensource.org/licenses/MS-PL
+-->

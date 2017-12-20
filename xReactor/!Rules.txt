@@ -1,0 +1,43 @@
+﻿Expression			What chains are in?		On which instance: what properties are tracked?
+------------------------------------------------------------------------------------------------
+A.B.M()				A.B						on A: B
+											on B: all, because method M() may operate on any property
+a.B					a.B						on a: B; although 'a' is a field, it's the first item in chain,
+												  so a strong reference would be held to it anyway, even
+												  if no listeners were attached.
+
+
+
+------------------------------------------------------------------------------------------------
+
+For convenience fields that occur at the beginning of an expression should be tracked.
+Of course, we cannot say when a field is changed, so the attached listeners
+refer to the same instance that was stored in the field at the moment of initialisation.
+
+However, the same does not regard non-INPC properties occurring at the beginning of an expression.
+If need arises to have untrackable property at the beginning, store its value in a field
+first.
+
+The whole purpose of allowing fields (but not properties) in this context is to bring
+great comfort to the user. It originates from the requirement that expression can be
+built upon constructor parameters as in the example below:
+
+public MyClass(IViewModel anotherObject)
+{
+	React.To( () => anotherObject.PropertyOfChoice );
+} 
+
+Constructor parameters, when used in an expression, are wrapped in a closure class and 
+accessed in exactly the same way as fields. That is what is going on under the hood.
+Therefore, at a closer look, there's no way to distinguish between a local parameter 
+and a manually-created field (which is there before compilation). Wasn't it for this 
+reason, there wouldn't be support for fields at all. It came out as a side-effect.
+
+With properties things are slightly different (only those properties that declared
+on non-INPC objects). Local parameters, which we attempt to
+target, obviously are never properties. So then, we fall back to the standard set of
+rules, where change tracking doesn't propagate through objects that can't be seen
+to change.
+
+Finally, if a property is defined on an object that implements the INPC interface,
+there are no restrictions.

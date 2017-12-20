@@ -1,0 +1,118 @@
+﻿1. support for React.To subscription with detail about property change source
+   (sender, changed property name)
+2. option for delayed rx property reevaluation; receive a notification about
+   expression change would only invalidate the value and cause it to be 
+   reevaluate as soon as it is requested
+3. convert React.To stream to a rx property
+4. Make IReactiveObject and implement this on ReactiveBase class. 
+   Then reimplement method of the Create<> family as extensions of IReactiveObject
+5. Investigate whether it's not pushing initial value to observer on subscription that
+   causes discrepancy between two exception handling models (turn off / fail fast).
+   Maybe, if the policy is 'turn off', the push should be wrapped in a try-catch block	
+   and consequently no exceptions should be thrown on a failure whether from within 
+   OnNext or not.
+6. Sth like React.Dependency( ()=>PropertA ).Dependency( ()=>PropertyB ).Of( ()=>expression...)
+   or React.To().ByRefreshing().Dependency( ()=>PropertA ).Dependency( ()=>PropertyB ).
+   This makes sense with properties that have only a getter and need update if another property
+   changes. This could as well be in following form: React.To().Notify(()=>PropertyName).
+
+-------------
+
+For typical CLR properties or fields, one could do sth like:
+
+void Setup(IExternalObject obj)
+{
+	int x;
+
+	React.To(()=> obj.value).Set(val=> x = val);
+	//in a more advanced scenario:
+	React.To(()=> obj.value).Where(val => val > 0).Set(val=> x = val + 100);
+
+	//another possibility:
+	React.To(()=> obj.value + 10).Set(()=>x)
+	//or more probably
+	React.To(()=> obj.value + 10).Set(val=> x = val)
+
+	//This would be useful, but filtering property change notification
+	//is buried deeper in the system and for now can't be set via a simple
+	//AllChanges() fluent-style call.
+	React.To(()=> obj.value + 10).AllChanges().Set(val=> x = val)
+}
+
+Alternatively,
+
+Reactor.GetStream(()=> this.PropertyA + anotherObj.PropertyB).Subscribe(...)
+
+-------------
+
+Methods and fields should break the track chain, e.g.
+(large letters A,B,C... = properties; a,b,c... = fields)
+(a(),b(),c()... = methods)
+
+No. Expression			What is tracked?
+ 1. A.B.C				A.B.C
+ 2. A.B.F()				A.B
+ 3. A.F().B				A
+ 4. F().A.B.C			- (nothing)
+ 5. A.a.B.b().C.D		A
+ 6. a.B.C				- (nothing)
+
+ It is tempting to allow expression as in p. 6., if the first
+ element is a field or local variable, in order to track
+ changes to all subelements of the 'a.B.C' chain. However, a big
+ downside is that if 'a' is a local variable or method parameter,
+ it's value will be kept in a lambda clause (anonymous class).
+ Therefore, it's not possible to distinguish it from the following use:
+	
+	var instance = new SomeClass();
+	React.To( ()=> instance.myField.MyProperty )
+
+If an expression of the above form was written explicitly, there'd
+be no doubt changes to 'MyProperty' should not be tracked. Not to 
+violate the convention another approach is suggested. 
+Assume that new method 
+
+	React.TrackInstance(INotifyPropertyChanged instance);
+
+creates a new observable stream of changes raised on 'instance'.
+One could merge the stream with the one obtained from a React.To(...)
+call. To conduct this in a fluent and readable manner, let's introduce
+another extension method: And(), which would do the merging, but have
+a more user-friendly name. Example syntax:
+
+	React.To( [expr] ).And().TrackInstance( [instance] );
+
+Alternatives: 
+
+	React.To( [expr] ).AndTrackInstance( [instance] );
+	React.To( [expr] ).AndTrackInstance( [instance], <optional params>[property names] );
+
+A change to 'instance' should result in reevaluating the expression value 
+and resetting the target.
+
+-----------
+
+Allow to Capture() a part of expression as a non-trackable ('constant') element.
+Capture() extension method would appear similar to marker methods, although it'd
+probably require different handling mechanism. Use is to found, i.e. in case of 
+static properties:
+
+React.To(() => SingletonObject.InstanceProperty.IntProperty) ...
+
+where 'InstanceProperty' is a static property. Normally, no properties can be 
+tracked in the above expression, because 'InstanceProperty' is static and 
+thus breaks the notification chain just at its beginning. Typical remedy is
+to store the breaking instance in a variable and then refer to it in the 
+reactive expression:
+
+var instance = SingletonObject.InstanceProperty;
+React.To(() => instance.IntProperty) ...
+
+Instead Capture() could be used as shown below:
+
+React.To(() => SingletonObject.InstanceProperty.Capture().IntProperty)
+
+Since Capture() is an extension method, 'SingletonObject.InstanceProperty' part
+is strictly speaking its argument. Then, the argument of Capture() should be 
+evaluated and make the result be treated as a constant expression (evaluated once
+when parsing).

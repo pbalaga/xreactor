@@ -1,0 +1,60 @@
+﻿<Window x:Class="xReactor.WpfSample.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:sample="clr-namespace:xReactor.WpfSample"
+        xmlns:toolkit="http://schemas.xceed.com/wpf/xaml/toolkit"
+        Title="xReactor Sample WPF App"
+        Width="525"
+        Height="350">
+    <Window.Resources>
+        <DataTemplate DataType="{x:Type sample:AdultPanelVM}">
+            <StackPanel>
+                <Button Margin="5"
+                        Command="{Binding DrinkBeer}"
+                        Content="Drink beer" />
+                <Button Margin="5"
+                        Command="{Binding Drive}"
+                        Content="Drive" />
+            </StackPanel>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type sample:YoungsterPanelVM}">
+            <StackPanel>
+                <Button Margin="5"
+                        Command="{Binding WatchCartoons}"
+                        Content="Watch cartoons" />
+                <Button Margin="5"
+                        Command="{Binding Cry}"
+                        Content="Cry" />
+            </StackPanel>
+        </DataTemplate>
+    </Window.Resources>
+    <DockPanel>
+        <toolkit:PropertyGrid DockPanel.Dock="top" SelectedObject="{Binding Person}" />
+        <StackPanel Margin="5"
+                    DockPanel.Dock="top"
+                    Orientation="Horizontal">
+            <TextBlock Text="Years until reaching majority age: " />
+            <TextBlock Text="{Binding YearsBelow18}" />
+        </StackPanel>
+        <StackPanel Margin="5"
+                    DockPanel.Dock="top"
+                    Orientation="Horizontal">
+            <TextBlock Text="Years until retirement: " />
+            <TextBlock Text="{Binding YearsLeftToRetirement}" />
+        </StackPanel>
+
+        <GroupBox MinHeight="50"
+                  Margin="5"
+                  HorizontalContentAlignment="Center"
+                  Content="{Binding OperationPanel}"
+                  DockPanel.Dock="Top"
+                  Header="{Binding OperationPanel.Name}"
+                  ToolTip="Modify age to change controls automatically" />
+        <TextBox MinHeight="60"
+                 AcceptsReturn="True"
+                 IsReadOnly="True"
+                 Text="{Binding Logger.Text,
+                                Mode=OneWay}"
+                 VerticalScrollBarVisibility="Auto" />
+    </DockPanel>
+</Window>

@@ -1,0 +1,139 @@
+﻿<Window x:Class="xReactor.Samples.MVVMLight.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:app="clr-namespace:xReactor.Samples.MVVMLight"
+        xmlns:vm="clr-namespace:xReactor.Samples.MVVMLight.ViewModel"
+        Title="xReactor - Sample for MVVM Light Toolkit"
+        Width="525"
+        Height="350">
+    <Window.Resources>
+        <DataTemplate DataType="{x:Type vm:PlaceholderTab}">
+            <TextBlock HorizontalAlignment="Center"
+                       VerticalAlignment="Center"
+                       TextWrapping="WrapWithOverflow">
+                By adding new placholder tabs you can observe, how their header change.
+                Total count of placeholder tabs is shown in the header and kept in tact,
+                while it changes.
+            </TextBlock>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:PeopleViewModel}">
+            <DockPanel>
+                <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
+                    <Button Command="{Binding AddPersonCommand}" Content="Add person" />
+                    <ToggleButton IsChecked="{Binding IsViewingActors}">
+                        <ToggleButton.Style>
+                            <Style TargetType="{x:Type ToggleButton}">
+                                <Setter Property="Content" Value="Now viewing: actors" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding IsViewingActors}" Value="False">
+                                        <Setter Property="Content" Value="Now viewing: directors" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </ToggleButton.Style>
+                    </ToggleButton>
+                    <TextBlock Margin="10,0"
+                               VerticalAlignment="Center"
+                               Text="{Binding AverageAgeString}" />
+                </StackPanel>
+                <DataGrid AutoGenerateColumns="False"
+                          CanUserAddRows="True"
+                          CanUserDeleteRows="True"
+                          ItemsSource="{Binding People}">
+                    <DataGrid.Columns>
+                        <DataGridTemplateColumn Width="SizeToCells"
+                                                MinWidth="100"
+                                                Header="Name"
+                                                IsReadOnly="False">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" />
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                            <DataGridTemplateColumn.CellEditingTemplate>
+                                <DataTemplate>
+                                    <Grid FocusManager.FocusedElement="{Binding ElementName=editor}">
+                                        <TextBox Name="editor" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" />
+                                    </Grid>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellEditingTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn Width="SizeToHeader"
+                                                Header="Age"
+                                                IsReadOnly="False">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock HorizontalAlignment="Center" Text="{Binding Age}" />
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                            <DataGridTemplateColumn.CellEditingTemplate>
+                                <DataTemplate>
+                                    <TextBox Text="{Binding Age}" />
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellEditingTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn Width="SizeToCells"
+                                                Header="Status"
+                                                IsReadOnly="False">
+                            <DataGridTemplateColumn.HeaderTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding}" ToolTip="Status compared to average age" />
+                                </DataTemplate>
+                            </DataGridTemplateColumn.HeaderTemplate>
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Polygon HorizontalAlignment="Center"
+                                             VerticalAlignment="Center"
+                                             LayoutTransform="{Binding ArrowIndicatorRotation}"
+                                             Points="0,0 6,3.5 0,7"
+                                             Stroke="{Binding ArrowIndicatorColor}"
+                                             ToolTip="{Binding ComparedToAverageAge}" />
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </DockPanel>
+        </DataTemplate>
+    </Window.Resources>
+    <Window.DataContext>
+        <Binding Path="Main">
+            <Binding.Source>
+                <vm:ViewModelLocator />
+            </Binding.Source>
+        </Binding>
+    </Window.DataContext>
+    <DockPanel>
+        <StackPanel Margin="5"
+                    DockPanel.Dock="Top"
+                    Orientation="Horizontal">
+            <Button Command="{Binding AddPlaceholderTabCommand}" Content="Add Placeholder Tab" />
+            <StackPanel Margin="5,0"
+                        VerticalAlignment="Center"
+                        Orientation="Horizontal">
+                <TextBlock Text="Decimal places: " />
+                <TextBox MinWidth="70"
+                         Text="{Binding Source={x:Static app:Settings.Current},
+                                        Path=DecimalPlaces}"
+                         TextAlignment="Right"
+                         ToolTip="Number of decimal places to show, when formatting numbers" />
+            </StackPanel>
+        </StackPanel>
+        <TabControl ItemsSource="{Binding Tabs}" SelectedItem="{Binding ActiveTab}">
+            <TabControl.Resources>
+                <Style TargetType="{x:Type TabItem}">
+                    <Setter Property="HeaderTemplate">
+                        <Setter.Value>
+                            <DataTemplate>
+                                <TextBlock HorizontalAlignment="Stretch"
+                                           VerticalAlignment="Stretch"
+                                           Foreground="{Binding HeaderBackgroundColor}"
+                                           Text="{Binding ExtendedHeader}" />
+                            </DataTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </TabControl.Resources>
+        </TabControl>
+    </DockPanel>
+</Window>

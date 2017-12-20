@@ -1,0 +1,68 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "xReactor", "xReactor\xReactor.csproj", "{EB625E79-1324-4E0B-86CD-5AD01C01615A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "xReactor.Tests", "xReactor.Tests\xReactor.Tests.csproj", "{F7948853-F587-4B44-9F91-FF2AF02C4D6D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "xReactor.WpfSample", "xReactor.WpfSample\xReactor.WpfSample.csproj", "{C425E6DB-4F77-490A-B397-DB800CDD95B4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "xReactor.Tests.Benchmarks", "xReactor.Tests.Benchmarks\xReactor.Tests.Benchmarks.csproj", "{7E87E871-9F95-4546-A57D-23562A5DBC21}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "xReactor.Common", "xReactor.Common\xReactor.Common.csproj", "{28D4A79E-EF66-40D9-8F2F-AC5D5E4EAF5E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Samples", "Samples", "{171420C5-845D-4C08-87EE-AB5B2C194990}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "xReactor.Samples.MVVMLight", "Samples\xReactor.Samples.MVVMLight\xReactor.Samples.MVVMLight.csproj", "{3218FDEB-DF55-4FD7-9E8F-9CBF4BAF9E01}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{B657943F-E073-4F5E-8E8E-D18915370223}"
+	ProjectSection(SolutionItems) = preProject
+		LICENSE.txt = LICENSE.txt
+		xReactor.licenseheader = xReactor.licenseheader
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SubversionScc) = preSolution
+		Svn-Managed = True
+		Manager = AnkhSVN - Subversion Support for Visual Studio
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{EB625E79-1324-4E0B-86CD-5AD01C01615A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EB625E79-1324-4E0B-86CD-5AD01C01615A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EB625E79-1324-4E0B-86CD-5AD01C01615A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EB625E79-1324-4E0B-86CD-5AD01C01615A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F7948853-F587-4B44-9F91-FF2AF02C4D6D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F7948853-F587-4B44-9F91-FF2AF02C4D6D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F7948853-F587-4B44-9F91-FF2AF02C4D6D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F7948853-F587-4B44-9F91-FF2AF02C4D6D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C425E6DB-4F77-490A-B397-DB800CDD95B4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C425E6DB-4F77-490A-B397-DB800CDD95B4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C425E6DB-4F77-490A-B397-DB800CDD95B4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C425E6DB-4F77-490A-B397-DB800CDD95B4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7E87E871-9F95-4546-A57D-23562A5DBC21}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7E87E871-9F95-4546-A57D-23562A5DBC21}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7E87E871-9F95-4546-A57D-23562A5DBC21}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7E87E871-9F95-4546-A57D-23562A5DBC21}.Release|Any CPU.Build.0 = Release|Any CPU
+		{28D4A79E-EF66-40D9-8F2F-AC5D5E4EAF5E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{28D4A79E-EF66-40D9-8F2F-AC5D5E4EAF5E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{28D4A79E-EF66-40D9-8F2F-AC5D5E4EAF5E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{28D4A79E-EF66-40D9-8F2F-AC5D5E4EAF5E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3218FDEB-DF55-4FD7-9E8F-9CBF4BAF9E01}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3218FDEB-DF55-4FD7-9E8F-9CBF4BAF9E01}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3218FDEB-DF55-4FD7-9E8F-9CBF4BAF9E01}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3218FDEB-DF55-4FD7-9E8F-9CBF4BAF9E01}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{3218FDEB-DF55-4FD7-9E8F-9CBF4BAF9E01} = {171420C5-845D-4C08-87EE-AB5B2C194990}
+	EndGlobalSection
+	GlobalSection(Performance) = preSolution
+		HasPerformanceSessions = true
+	EndGlobalSection
+EndGlobal

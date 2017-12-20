@@ -1,0 +1,66 @@
+﻿Problem: StackOverflowException occurs
+Repro steps:
+- use SetAndNotify syntax to set value of a property that calls RaiseNotifyPropertyChanged (or equivalent) from within its setter
+  but it doesn't check whether the value has changed at all or the check fails for some reason. It's been noticed to fail
+  when the property type is RotateTransform in WPF.
+
+        React.To(() => this.Age - PeopleViewModel.AverageAge)
+            .Select(diff =>
+            {
+                if (diff > 0) return new RotateTransform(-90.0);
+                else if (diff == 0) return new RotateTransform(0.0);
+                else return new RotateTransform(90.0);
+            })
+            .Set(() => ArrowIndicatorRotation);
+
+then
+
+        private RotateTransform arrowIndicatorRotation;
+        public RotateTransform ArrowIndicatorRotation
+        {
+            get { return arrowIndicatorRotation; }
+            set
+            {
+                if (arrowIndicatorRotation != value)
+                {
+                    arrowIndicatorRotation = value;
+                    RaisePropertyChanged(() => ArrowIndicatorRotation);
+                }
+            }
+        }
+
+or
+
+        private RotateTransform arrowIndicatorRotation;
+        public RotateTransform ArrowIndicatorRotation
+        {
+            get { return arrowIndicatorRotation; }
+            set
+            {
+                arrowIndicatorRotation = value;
+                RaisePropertyChanged(() => ArrowIndicatorRotation);
+            }
+        }
+
+Assumption is that the condition 'if (arrowIndicatorRotation != value)' cannot 
+properly verify whether the received instance of RotateTransform is equal to the
+one already set. It probably erroneously treats the new value as different every time.
+
+The property code can be as simple as
+
+        private double rotation;
+
+        public double Rotation
+        {
+            get { return rotation; }
+            set
+            {
+                //if (rotation != value)
+                {
+                    rotation = value;
+                    RaisePropertyChanged(() => Rotation);
+                }
+            }
+        }
+
+to also cause stack overflow.
